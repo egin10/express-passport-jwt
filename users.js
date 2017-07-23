@@ -2,7 +2,7 @@ module.exports = users = [
   {
     id: 1,
     name: "Mas Tumin",
-    email: "tuminn@mail.com",
+    email: "tumin@mail.com",
     password: "123"
   },
   {
