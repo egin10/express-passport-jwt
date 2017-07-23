@@ -1,9 +1,10 @@
-# express-passport-jwt
+# express-passport-jwt API
 Learn about express use passport-jwt basic
 
 1. clone `git clone https://github.com/egin10/express-passport-jwt.git`
 2. run use `node index` or `npm start`
 3. use Postman or tools similiar like that for test API
+4. you can try for web auth on branch `webAuth`, just switch on there `git checkout webAuth`
 
 Note
 ---
