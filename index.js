@@ -39,7 +39,7 @@ app.post("/login", (req, res) => {
     */
     let payload = { id: user.id };
     let token = jwt.sign(payload, cfg.jwtSecret);
-    res.json({ message: "success", token: token });
+    res.json({ message: "success", token: 'JWT ' + token });
   } else {
     res.status(401).json({ message: "passwords did not match" });
   }
