@@ -52,7 +52,8 @@ app.post("/login", (req, res) => {
 
     res.cookie('JWT', 'JWT '+token, { expires: new Date(new Date().getTime()+30*1000), httpOnly: true });
 
-    res.json({ message: "success", token: "JWT " + token });
+    //res.json({ message: "success", token: "JWT " + token });
+    res.redirect('/kiw');
   } else {
     res.status(401).json({ message: "passwords did not match" });
   }
