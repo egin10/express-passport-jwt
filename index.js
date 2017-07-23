@@ -1,5 +1,5 @@
 const express = require("express"),
-  _ = require('lodash'),
+  _ = require("lodash"),
   bodyParser = require("body-parser"),
   jwt = require("jsonwebtoken"),
   auth = require("./auth.js")(),
@@ -15,6 +15,10 @@ app.get("/", (req, res) => {
   res.json({
     status: "KiwKiwKiw!"
   });
+});
+
+app.get("/login", (req, res) => {
+  res.send('form login');
 });
 
 app.post("/login", (req, res) => {
@@ -39,22 +43,30 @@ app.post("/login", (req, res) => {
     */
     let payload = { id: user.id };
     let token = jwt.sign(payload, cfg.jwtSecret);
-    res.json({ message: "success", token: 'JWT ' + token });
+
+    res.json({ message: "success", token: "JWT " + token });
   } else {
     res.status(401).json({ message: "passwords did not match" });
   }
 });
 
 app.get("/kiw", auth.authenticate(), (req, res) => {
-  res.json( {id : users[req.user.id], message: 'Success! You can not see this without a token'});
+  res.json({
+    id: users[req.user.id],
+    message: "Success! You can not see this without a token"
+  });
 });
 
-app.get("/secretDebug", (req, res, next) => {
-    console.log(req.get('Authorization'));
+app.get(
+  "/secretDebug",
+  (req, res, next) => {
+    console.log(req.get("Authorization"));
     next();
-  }, (req, res) => {
+  },
+  (req, res) => {
     res.json("Debugging Okey!");
-});
+  }
+);
 
 const port = process.env.PORT || 8000;
 app.listen(port, () => {
