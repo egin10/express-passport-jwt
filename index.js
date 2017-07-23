@@ -17,10 +17,6 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/kiw", auth.authenticate(), (req, res) => {
-  res.json( {id : users[req.user.id], message: 'Success! You can not see this without a token'});
-});
-
 app.post("/login", (req, res) => {
   let dataInput = {};
 
@@ -47,6 +43,10 @@ app.post("/login", (req, res) => {
   } else {
     res.status(401).json({ message: "passwords did not match" });
   }
+});
+
+app.get("/kiw", auth.authenticate(), (req, res) => {
+  res.json( {id : users[req.user.id], message: 'Success! You can not see this without a token'});
 });
 
 app.get("/secretDebug", (req, res, next) => {
