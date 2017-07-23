@@ -1,4 +1,6 @@
 const express = require("express"),
+  cookieParser = require("cookie-parser"),
+  expHbs = require("express-handlebars"),
   _ = require("lodash"),
   bodyParser = require("body-parser"),
   jwt = require("jsonwebtoken"),
@@ -7,6 +9,10 @@ const express = require("express"),
   cfg = require("./config.js"),
   app = express();
 
+app.engine("hbs", expHbs({ defaultLayout: "main", extname: ".hbs" }));
+app.set("view engine", "hbs");
+
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(auth.initialize());
@@ -18,7 +24,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.send('form login');
+  res.render("login");
 });
 
 app.post("/login", (req, res) => {
@@ -44,6 +50,8 @@ app.post("/login", (req, res) => {
     let payload = { id: user.id };
     let token = jwt.sign(payload, cfg.jwtSecret);
 
+    res.cookie('JWT', 'JWT '+token, { expires: new Date(new Date().getTime()+30*1000), httpOnly: true });
+
     res.json({ message: "success", token: "JWT " + token });
   } else {
     res.status(401).json({ message: "passwords did not match" });
@@ -53,7 +61,8 @@ app.post("/login", (req, res) => {
 app.get("/kiw", auth.authenticate(), (req, res) => {
   res.json({
     id: users[req.user.id],
-    message: "Success! You can not see this without a token"
+    message: "Success! You can not see this without a token",
+    header: req.headers
   });
 });
 
@@ -61,6 +70,8 @@ app.get(
   "/secretDebug",
   (req, res, next) => {
     console.log(req.get("Authorization"));
+    console.log(req.cookies);
+    res.clearCookie('JWT');
     next();
   },
   (req, res) => {

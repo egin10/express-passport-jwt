@@ -6,10 +6,15 @@ const passport = require("passport"),
   ExtractJwt = passportJWT.ExtractJwt,
   JwtStrategy = passportJWT.Strategy;
 
-let jwtOptions = {
-  secretOrKey: cfg.jwtSecret,
-  jwtFromRequest: ExtractJwt.fromAuthHeader()
+let cookieExtractor = (req) => {
+  token = null;
+  if(req && req.cookies) token = req.cookies['jwt'];
+  return token;
 };
+
+let jwtOptions = {};
+jwtOptions.secretOrKey = cfg.jwtSecret;
+jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader();
 
 module.exports = () => {
   let strategy = new JwtStrategy(jwtOptions, (jwt_payload, done) => {
