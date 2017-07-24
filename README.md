@@ -16,4 +16,6 @@ To test if this works, first log in and copy the token, then open a new Postman 
 
 Note: It’s important the Auth header starts with JWT and a whitespace followed by the token, else passport-jwt will not extract it.
 
+Demo : [passport-jwt-basic](https://passport-jwt-basic.herokuapp.com/)
+
 Explore it!
