@@ -48,9 +48,11 @@ app.post("/login", (req, res) => {
     and the id is the only personalized value that goes into our token
     */
     let payload = { id: user.id };
-    let token = jwt.sign(payload, cfg.jwtSecret);
+    let token = jwt.sign(payload, cfg.jwtSecret, {
+      expiresIn: 60 // in seconds
+    });
 
-    res.cookie('JWT', 'JWT '+token, { expires: new Date(new Date().getTime()+30*1000), httpOnly: true });
+    res.cookie('jwt', token, { expires: new Date(new Date().getTime()+30*1000), httpOnly: true });
 
     //res.json({ message: "success", token: "JWT " + token });
     res.redirect('/kiw');
@@ -70,9 +72,8 @@ app.get("/kiw", auth.authenticate(), (req, res) => {
 app.get(
   "/secretDebug",
   (req, res, next) => {
-    console.log(req.get("Authorization"));
     console.log(req.cookies);
-    res.clearCookie('JWT');
+    res.clearCookie('jwt');
     next();
   },
   (req, res) => {
